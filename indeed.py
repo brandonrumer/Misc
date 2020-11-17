@@ -1,7 +1,25 @@
 #!/usr/local/bin/python3
 
-# A sample application showing how beautifulsoup can be leveraged in real-world applications
+""" Summary:  
+        A sample application showing how beautifulsoup can be leveraged in real-world 
+        applications. This specific script searches Indeed for a job.
 
+
+Usage:
+        indeed.py [-h] [-j job] [-s state]
+
+            Searches Indeed for a job in a state.
+
+        optional arguments:
+        -h, --help            show this help message and exit
+        -j job, --job job     What job to look for. If using a space "double quotes" must be used.
+        -s state, --state state
+                                Where to look (MUST USE A 2 LETTER STATE CODE)
+
+
+Requirements: 
+    beautifulsoup
+"""
 
 import requests
 import argparse
@@ -29,7 +47,7 @@ def main():
         help='Where to look (MUST USE A 2 LETTER STATE CODE)'
         )
     args = parser.parse_args()
-    
+
     # Fix any spaces in the job search
     args.job = args.job.replace(' ','+')
 
