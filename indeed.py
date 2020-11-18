@@ -21,6 +21,7 @@ Requirements:
     beautifulsoup
 """
 
+from tabulate import tabulate
 import requests
 import argparse
 import math
@@ -63,11 +64,18 @@ def main():
     splitsentence = pages.split()
     totaljobs = splitsentence[3]
     #print(totalpages)
-    # Lose the comma if there are greater than 1000 pages
+    # Lose the comma if there are greater than 1000 pages    
     totaljobs = totaljobs.replace(',','')
 
     # We have the total jobs, get the total pages to search through, in sections of 10
     pages = int(math.ceil(int(totaljobs) / 10.0))
+
+
+    jobs = []
+    # Ugly way to do this but its quick
+    jobheaders = ['Company','Job Title','Location']
+    jobs.append(jobheaders)
+    print('\n')
 
     # Go through all the search results, 10 at a time and pull out the data
     for i in range(0, pages, 10):
@@ -78,15 +86,18 @@ def main():
         for x in results:
             try: 
                 company = x.find('span', attrs={"class":"company"})
-                print('Company:', company.text.strip())
+                #print('Company:', company.text.strip())
                 job = x.find('a', attrs={'data-tn-element': "jobTitle"})
-                print('Job:', job.text.strip())
+                #print('Job:', job.text.strip())
                 location = x.find('span', attrs={"class":"location accessible-contrast-color-location"})
-                print('Location:' , location.text.strip())
-                print('\n')
+                #print('Location:' , location.text.strip())
+                #print('\n')
+                result = [company.text.strip(),job.text.strip(),location.text.strip()]
+                jobs.append(result)
             except AttributeError:
                 pass
 
+    print(tabulate(jobs, tablefmt="grid",))
 
 if __name__ == "__main__":
     main()
