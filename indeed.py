@@ -68,8 +68,8 @@ def main():
     totaljobs = totaljobs.replace(',','')
 
     # We have the total jobs, get the total pages to search through, in sections of 10
-    pages = int(math.ceil(int(totaljobs) / 10.0))
-
+    pages = round(int(totaljobs) / int(10))
+  
 
     jobs = []
     # Ugly way to do this but its quick
