@@ -18,7 +18,7 @@ Usage:
 
 
 Requirements: 
-    beautifulsoup
+    beautifulsoup, tabulate
 """
 
 from tabulate import tabulate
@@ -75,7 +75,7 @@ def main():
     # Ugly way to do this but its quick
     jobheaders = ['Company','Job Title','Location']
     jobs.append(jobheaders)
-    print('\n')
+    print('\n' *2 )
 
     # Go through all the search results, 10 at a time and pull out the data
     for i in range(0, pages, 10):
@@ -96,8 +96,11 @@ def main():
                 jobs.append(result)
             except AttributeError:
                 pass
-
+    print('Found' , len(jobs) , 'matching jobs!')
+    print('\n')
     print(tabulate(jobs, tablefmt="grid",))
+    print('\n')
+
 
 if __name__ == "__main__":
     main()
