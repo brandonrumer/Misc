@@ -18,22 +18,24 @@ import requests, time, os
 from bs4 import BeautifulSoup
 from datetime import datetime
 import pandas as pd
+# due to a bug in Windowz, you'll need 'pip install numpy==1.19' for pandas
+import platform 
 
 
 def main():
+    operatingsystem = getplatform()
     while True:
         try:
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
             print("Current Time =", current_time)
-            print('\n')
 
             PopFindrBestBuy()
             PopFindrTarget()
             bhphoto()
             newegg()
             print('\n')
-            print('Sleeping for 60 seconds')
+            print('Sleeping for 45 seconds')
             time.sleep(45)
             print('\n')
         except Exception:
@@ -44,12 +46,40 @@ def main():
             quit()
 
 
-def beep():
-    duration = 20  # seconds
-    freq = 440  # Hz
-    os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+def getplatform():
+    try:
+        plt = platform.system()
+        if plt == "Windows":
+            print("Your system is Windows")
+            operatingsystem = "Windows"
+        elif plt == "Linux":
+            print("Your system is Linux")
+            operatingsystem = "Linux"
+        elif plt == "Darwin":
+            print("Your system is MacOS")
+            operatingsystem = "Mac"
+        else:
+            #print("Unidentified system")
+            operatingsystem='Linux'
+        return operatingsystem
+    except Exception:
+        print('error in getting OS information.')
+        quit()
+    except  KeyboardInterrupt:
+        quit()
 
-    
+
+def beep(operatingsystem):
+    if operatingsystem == 'linux':
+        duration = 20  # seconds
+        freq = 440  # Hz
+        os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+    if operatingsystem =='windows':
+        for i in range(1,10):
+            winsound.PlaySound("SystemAsterisk", winsound.SND_ALIAS)
+
+
+
 def newegg():
     #print('Checking NewEgg')
     try:
@@ -59,7 +89,7 @@ def newegg():
         stock = soup.find('div', {'class':'product-inventory'})
         if 'OUT OF STOCK' not in stock.text.strip():
             print('-----------Newegg-----: ' , stock.text.strip())
-            beep()
+            beep(operatingsystem)
         elif 'OUT OF STOCK' in stock.text.strip():
             print('Newegg: ' , stock.text.strip())
     except KeyboardInterrupt:
@@ -80,7 +110,7 @@ def bhphoto():
             stock = soup.find('span', {'data-selenium':'stockStatus'})
             if 'In Stock' in stock.text.strip():
                 print('-----------------BHPhotoVideo: -------' , stock.text.strip())
-                beep()
+                beep(operatingsystem)
             elif 'In Stock' not in stock.text.strip():
                 print('BHPhotoVideo: Not in stock.')
         except Exception:
@@ -102,11 +132,11 @@ def PopFindrTarget():
             row = tables.find_all('tr')[1]
             cell = row.find_all('th')[2]
             inventory = cell.text.strip()
-            if inventory is '0':
-                print(f'Target has {inventory} IN STOCK!')
-                beep()
-            elif inventory is not '0':
+            if inventory == '0':
                 print(f'Target has {inventory}.')
+            elif inventory != '0':
+                print(f'Target has {inventory} IN STOCK!')
+                beep(operatingsystem)
         except Exception:
             print('Target: String Not found (Probably out of stock)')
     except Exception:
@@ -126,11 +156,11 @@ def PopFindrBestBuy():
             row = tables.find_all('tr')[1]
             cell = row.find_all('th')[2]
             inventory = cell.text.strip()
-            if inventory is '0':
-                print(f'Best Buy has {inventory} IN STOCK!')
-                beep()
-            elif inventory is not '0':
+            if inventory == '0':
                 print(f'Best Buy has {inventory}.')
+            elif inventory != '0':
+                print(f'Best Buy has {inventory} IN STOCK!')
+                beep(operatingsystem)
         except Exception:
             print('Best Buy: String Not found (Probably out of stock)')
     except Exception:
