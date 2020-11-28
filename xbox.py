@@ -10,7 +10,9 @@ Best Buy, Target, and Walmart actually have APIs but you need to be registered
  scrape inventory from the results. This is for the Target and Best Buy inventory
  in Fayetteville NC. Use Firefox Developer to pull the right page from PopFindr.
 
-TFor the sound to work in Linux under Python3: You need: 'sudo apt install sox' on a 
+ Added Microsoft.com inventory scrape. 
+ 
+ For the sound to work in Linux under Python3: You need: 'sudo apt install sox' on a 
  Debian-based system so that the system can 'beep' at you when the item is found.
 '''
 
