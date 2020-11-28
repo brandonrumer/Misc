@@ -10,7 +10,7 @@ Best Buy, Target, and Walmart actually have APIs but you need to be registered
  scrape inventory from the results. This is for the Target and Best Buy inventory
  in Fayetteville NC. Use Firefox Developer to pull the right page from PopFindr.
 
-This works on Linux under Python3. You need: 'sudo apt install sox' on a 
+TFor the sound to work in Linux under Python3: You need: 'sudo apt install sox' on a 
  Debian-based system so that the system can 'beep' at you when the item is found.
 '''
 
@@ -23,20 +23,22 @@ import platform
 
 
 def main():
+
     operatingsystem = getplatform()
     while True:
         try:
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
-            print("Current Time =", current_time)
+            print("Current Time: ", current_time)
 
             PopFindrBestBuy()
             PopFindrTarget()
+            microsoft()
             bhphoto()
             newegg()
             print('\n')
-            print('Sleeping for 45 seconds')
-            time.sleep(45)
+            print('Sleeping for 60 seconds')
+            time.sleep(60)
             print('\n')
         except Exception:
             print('Ran into an exception in check function. Pausing for 60 seconds.')
@@ -135,7 +137,7 @@ def PopFindrTarget():
             if inventory == '0':
                 print(f'Target has {inventory}.')
             elif inventory != '0':
-                print(f'Target has {inventory} IN STOCK!')
+                print(f'---------------Target has {inventory} IN STOCK!')
                 beep(operatingsystem)
         except Exception:
             print('Target: String Not found (Probably out of stock)')
@@ -145,6 +147,26 @@ def PopFindrTarget():
         print('Quitting...')
         quit()
 
+def microsoft():
+    producturl ='https://www.xbox.com/en-us/configure/8WJ714N3RBTL?ranMID=24542&ranEAID=kXQk6*ivFEQ&ranSiteID=kXQk6.ivFEQ-WT4rQZgrrl6u7WL9k7aH9A&epi=kXQk6.ivFEQ-WT4rQZgrrl6u7WL9k7aH9A&irgwc=1&OCID=AID2000142_aff_7593_1243925&tduid=%28ir__gce1vdpse0kfqibbkk0sohzn3m2xsu1wbx0bflsr00%29%287593%29%281243925%29%28kXQk6.ivFEQ-WT4rQZgrrl6u7WL9k7aH9A%29%28%29&irclickid=_gce1vdpse0kfqibbkk0sohzn3m2xsu1wbx0bflsr00'
+    try:
+        page = requests.get(producturl)
+        soup = BeautifulSoup(page.content, 'html.parser')
+        #print(soup)
+        try:
+            stock = soup.find('button', {'class':'src-pages-BundleBuilder-components-BundleBuilderHeader-__BundleBuilderHeader-module___checkoutButton w-100 bg-light-green btn btn-primary'})
+            if 'Out of stock' not in stock.text.strip():
+                print('-----------------Microsoft: -------' , stock.text.strip())
+                beep(operatingsystem)
+            elif 'Out of stock' in stock.text.strip():
+                print('Microsoft: Not in stock.')
+        except Exception:
+            print('Microsoft: String Not found (Probably out of stock).')
+    except Exception:
+        print('Ran into an exception in Microsoft. Likely a request error.')
+    except KeyboardInterrupt:
+        print('Quitting...')
+        quit()
 
 def PopFindrBestBuy():
     producturl = 'https://popfindr.com/results?pid=6428324&zip=28348&range=25&webpage=bestbuy&token=03AGdBq27W1_OQsSNJW8bf-JBDrP8rU5xOwMy_Mi65vTZvU0RrYe-FBmslESjnNN2fh6ODHOVcxkl3jFMTdP8BV9-z0n2rp_5gxWPt32-IpmEhBK73oixHOvvsUKZM08S40xCLuPMt6oRYN8-X3zkOMBi1muqAs7Oy1IgDkYzX53zl12uXbEF712T-qMy0yCDJDKpOALYCHDWmXrrrkY8sQGUvZbsg0JfPHBo4bno3j9D0hx0iJ3z-BAJKkbvmmOve0yKuk-H91xP4G2ESTANHHVQKcrijxciAw3QNn8Px-yfBY6t232-FcpEsVv_5-KC9d96TE52o652tldztV-YQlRbVFTChJHkPH-ErF2x1ehKNis6PAcbhG4ywhcX9LgEp6eyqfNyh0oYwurPAdtojd5XFo_yoRvCSx7iun1AALIkrDSC4rLZMfiXU5OMuMYHwSHD_3BSsYQ4M7xBMy1AlwaqtbQ2Czvf_tQ'
@@ -159,10 +181,10 @@ def PopFindrBestBuy():
             if inventory == '0':
                 print(f'Best Buy has {inventory}.')
             elif inventory != '0':
-                print(f'Best Buy has {inventory} IN STOCK!')
+                print(f'---------------Best Buy has {inventory} IN STOCK!')
                 beep(operatingsystem)
         except Exception:
-            print('Best Buy: String Not found (Probably out of stock)')
+            print('Best Buy: String Not found (Probably out of stock) but maybe not?!')
     except Exception:
         print('Ran into an exception in PopFindr Best Buy. Likely a request error.')
     except KeyboardInterrupt:
