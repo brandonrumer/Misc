@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 ''' Summary: Connects to multiple hosts and uploads a file
 
 Decription:
@@ -11,8 +10,6 @@ Decription:
 
 
 ''' Importing built-in modules '''
-import os
-import sys
 import getpass
 import csv
 
