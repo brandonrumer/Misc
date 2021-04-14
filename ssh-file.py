@@ -14,7 +14,7 @@ import getpass
 import csv
 
 ''' Importing external modules '''
-import parmiko
+import paramiko
 
 
 __author__ = "Brandon Rumer"
