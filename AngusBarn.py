@@ -1,9 +1,7 @@
 #!/usr/local/bin/python3
 
 """ Summary:  
-        Checks for a reservation at the Angus Barn. 
-    Usage:
-        python AngusBarn.py
+        Checks for a reservation at the Angus Barn on a very specific date and time. 
 """
 
 import requests
