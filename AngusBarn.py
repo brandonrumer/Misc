@@ -20,8 +20,8 @@ import getpass
 def sendmail(password):
   port = 465  # For SSL
   smtp_server = "smtp.gmail.com"
-  sender_email = "someguyspythonmailer@gmail.com"  # Enter your address
-  receiver_email = "brumer0@gmail.com"  # Enter receiver address
+  sender_email = "@gmail.com"  # Enter your address
+  receiver_email = "@gmail.com"  # Enter receiver address
   
   #password = getpass("Type your password and press enter: ")
   #password = ''
