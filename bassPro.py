@@ -8,6 +8,7 @@ import traceback
 import smtplib
 import ssl
 import os
+import sys
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -35,6 +36,7 @@ def checkstock(operatingsystem, password):
         print('Pausing due to requests error')
         time.sleep(60)
 
+    # What to key off of. In this case, the page doesn't exist if there's no inventory
     nostock = 'This product has either been removed or is no longer available for sale.'
 
     try:
@@ -45,6 +47,7 @@ def checkstock(operatingsystem, password):
             sendmail(password)
             beep(operatingsystem)
             print('')
+            sys.exit(0) # remove if it should loop
 
     except Exception:
         print('Ran into an exception in parsing the data')
