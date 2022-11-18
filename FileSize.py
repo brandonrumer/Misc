@@ -68,6 +68,7 @@ def main():
 
     print('\n' * 3)
     print('Analyzed this directory: ' , path)
+
     # Add & print the size of all the items that met criteria
     numsum = sum(total)
     print("total size of items that meet date criteria: " , numsum)
